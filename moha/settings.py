@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'notifications',
     'pixel',
-    'payment'
+    'payment',
+   
 ]
 
 MIDDLEWARE = [
@@ -228,6 +229,37 @@ CKEDITOR_5_CONFIGS = {
                 'startIndex': True,
                 'reversed': True,
             },
+        },
+    },
+}
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": "scheduler.log",  # Logs will be written to this file
+            "formatter": "verbose",
+        },
+        "console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+    },
+    "loggers": {
+        "": {
+            "handlers": ["file", "console"],
+            "level": "INFO",
+            "propagate": True,
         },
     },
 }

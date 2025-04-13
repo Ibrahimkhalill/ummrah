@@ -182,13 +182,7 @@ def blog_detail(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
     
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
-from django.shortcuts import get_object_or_404
-from .models import Transactions
-from .serializers import TransactionSerializer
+
 
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])

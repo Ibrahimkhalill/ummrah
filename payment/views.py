@@ -97,7 +97,75 @@ def create_checkout_session(request):
 
 
     
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def create_checkout_admin_session(request):
+    # Use environment variable for domain
+    DOMAIN = "https://lamprey-included-lion.ngrok-free.app/api/payment"
 
+    # Get request data
+    amount = request.data.get("amount")
+    transactions_id = request.data.get("transactions_id")
+    currency = request.data.get("currency", "sar")
+
+    # Validate amount
+    if not amount:
+        return Response({"error": "Amount is required."}, status=400)
+
+    try:
+        amount = int(float(amount) * 100)  # Convert to smallest unit
+        if amount <= 0:
+            return Response({"error": "Amount must be greater than 0."}, status=400)
+    except (ValueError, TypeError):
+        return Response({"error": "Invalid amount format."}, status=400)
+
+    # Validate currency
+    if currency not in ["sar", "usd"]:
+        return Response({"error": "Unsupported currency."}, status=400)
+
+    # Validate transaction ID
+    if not transactions_id:
+        return Response({"error": "Transaction ID is required."}, status=400)
+    # Get the authenticated user
+    user = request.user
+    
+    try:
+        # Create Stripe Checkout session
+        session = stripe.checkout.Session.create(
+            payment_method_types=["card"],
+            line_items=[
+                {
+                    "price_data": {
+                        "currency": currency,
+                        "unit_amount": amount,
+                        "product_data": {
+                            "name": "Tourist Guide Service Payment",
+                            "description": f"Payment for guide service ",
+                        },
+                    },
+                    "quantity": 1,
+                }
+            ],
+            mode="payment",
+            success_url=f"{DOMAIN}/checkout/success/",
+            cancel_url=f"{DOMAIN}/checkout/cancel/",
+            metadata={
+                "user_id": str(user.id),
+                "transaction_id": str(transactions_id),
+                "custom_note": "Tracking payment for tourist guide service",
+            },
+        )
+
+        return Response({"checkout_url": session.url}, status=200)
+
+    except stripe.error.InvalidRequestError as e:
+        return Response({"error": f"Stripe request error: {str(e)}"}, status=400)
+    except stripe.error.AuthenticationError as e:
+        return Response({"error": "Authentication with Stripe failed."}, status=401)
+    except stripe.error.StripeError as e:
+        return Response({"error": f"Stripe error: {str(e)}"}, status=400)
+    except Exception as e:
+        return Response({"error": f"An unexpected error occurred: {str(e)}"}, status=500)
 
     
 @api_view(["POST"])
@@ -272,13 +340,13 @@ def checkout_cencel(request):
 #     return Response(response, status=200)
 
 
-# @api_view(["GET"])
-# def calculate_yearly_revenue(request):
+@api_view(["GET"])
+def calculate_yearly_revenue(request):
     """
     Calculate monthly revenue starting from the first subscription year to the current year.
     """
     # Step 1: Fetch all subscriptions from the database
-    subscriptions = Subscription.objects.all()
+    subscriptions = Transactions.objects.all()
     if not subscriptions:
         return Response({"error": "No subscriptions found"}, status=404)
 
@@ -287,18 +355,15 @@ def checkout_cencel(request):
 
     first_year = datetime.now().year  # Initialize with the current year
     for subscription in subscriptions:
-        if subscription.stripe_subscription_id is not None:
-            invoices = get_invoices_by_subscription(subscription.stripe_subscription_id)
-            if not invoices:
-                continue
+      
 
-            for invoice in invoices.auto_paging_iter():
-                if invoice.get("paid", False):  # Only consider paid invoices
-                    created_date = datetime.fromtimestamp(invoice["created"])
-                    year = created_date.year
-                    month = created_date.month
-                    yearly_monthly_revenue[year][month] += invoice.get("amount_paid", 0) / 100  # Convert cents to dollars
-                    first_year = min(first_year, year)  # Update the first year if earlier
+     
+            if subscription.status("Comeplete"):  # Only consider paid invoices
+                created_date = datetime.fromtimestamp(subscription["created"])
+                year = created_date.year
+                month = created_date.month
+                yearly_monthly_revenue[year][month] += subscription.get("amount_paid", 0) / 100  # Convert cents to dollars
+                first_year = min(first_year, year)  # Update the first year if earlier
 
     # Step 3: Prepare data from the first year to the current year
     current_year = datetime.now().year
