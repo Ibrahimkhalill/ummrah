@@ -4363,3 +4363,59 @@ INFO 2025-04-13 16:50:13,073 scheduler Canceled and deleted 0 transactions due t
 INFO 2025-04-13 16:50:13,073 base Job "update_transaction_status (trigger: interval[0:01:00], next run at: 2025-04-13 16:51:13 UTC)" executed successfully
 INFO 2025-04-13 16:50:13,074 base Job "cancel_pending_transactions (trigger: interval[0:01:00], next run at: 2025-04-13 16:51:13 UTC)" executed successfully
 INFO 2025-04-13 16:50:13,074 base Job "cancel_pending_transactions_by_updated_at (trigger: interval[0:01:00], next run at: 2025-04-13 16:51:13 UTC)" executed successfully
+INFO 2025-04-13 16:51:45,187 base Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO 2025-04-13 16:51:45,187 base Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO 2025-04-13 16:51:45,187 base Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO 2025-04-13 16:51:45,188 base Added job "update_transaction_status" to job store "default"
+INFO 2025-04-13 16:51:45,188 base Added job "cancel_pending_transactions" to job store "default"
+INFO 2025-04-13 16:51:45,188 base Added job "cancel_pending_transactions_by_updated_at" to job store "default"
+INFO 2025-04-13 16:51:45,188 base Scheduler started
+INFO 2025-04-13 16:51:45,188 scheduler Scheduler started: update_transaction_status, cancel_pending_transactions, and cancel_pending_transactions_by_updated_at will run every 1 minute.
+INFO 2025-04-13 16:51:45,479 base Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO 2025-04-13 16:51:45,479 base Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO 2025-04-13 16:51:45,479 base Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO 2025-04-13 16:51:45,479 base Added job "update_transaction_status" to job store "default"
+INFO 2025-04-13 16:51:45,479 base Added job "cancel_pending_transactions" to job store "default"
+INFO 2025-04-13 16:51:45,479 base Added job "cancel_pending_transactions_by_updated_at" to job store "default"
+INFO 2025-04-13 16:51:45,479 base Scheduler started
+INFO 2025-04-13 16:51:45,479 scheduler Scheduler started: update_transaction_status, cancel_pending_transactions, and cancel_pending_transactions_by_updated_at will run every 1 minute.
+INFO 2025-04-13 16:51:45,481 autoreload Watching for file changes with StatReloader
+INFO 2025-04-13 16:51:46,058 server HTTP/2 support not enabled (install the http2 and tls Twisted extras)
+INFO 2025-04-13 16:51:46,058 server Configuring endpoint tcp:port=8000:interface=127.0.0.1
+INFO 2025-04-13 16:51:46,058 server Listening on TCP address 127.0.0.1:8000
+INFO 2025-04-13 16:52:45,194 base Running job "update_transaction_status (trigger: interval[0:01:00], next run at: 2025-04-13 16:52:45 UTC)" (scheduled at 2025-04-13 16:52:45.187318+00:00)
+INFO 2025-04-13 16:52:45,195 base Running job "cancel_pending_transactions (trigger: interval[0:01:00], next run at: 2025-04-13 16:53:45 UTC)" (scheduled at 2025-04-13 16:52:45.187844+00:00)
+INFO 2025-04-13 16:52:45,195 base Running job "cancel_pending_transactions_by_updated_at (trigger: interval[0:01:00], next run at: 2025-04-13 16:53:45 UTC)" (scheduled at 2025-04-13 16:52:45.187937+00:00)
+INFO 2025-04-13 16:52:45,209 scheduler Canceled and deleted 0 transactions due to payment timeout (based on created_at).
+INFO 2025-04-13 16:52:45,209 base Job "cancel_pending_transactions (trigger: interval[0:01:00], next run at: 2025-04-13 16:53:45 UTC)" executed successfully
+INFO 2025-04-13 16:52:45,209 scheduler Canceled and deleted 0 transactions due to remaining in Pending status for too long (based on updated_at).
+INFO 2025-04-13 16:52:45,209 scheduler Updated 0 transactions to Completed.
+INFO 2025-04-13 16:52:45,210 base Job "cancel_pending_transactions_by_updated_at (trigger: interval[0:01:00], next run at: 2025-04-13 16:53:45 UTC)" executed successfully
+INFO 2025-04-13 16:52:45,210 base Job "update_transaction_status (trigger: interval[0:01:00], next run at: 2025-04-13 16:53:45 UTC)" executed successfully
+INFO 2025-04-13 16:52:45,484 base Running job "update_transaction_status (trigger: interval[0:01:00], next run at: 2025-04-13 16:52:45 UTC)" (scheduled at 2025-04-13 16:52:45.479247+00:00)
+INFO 2025-04-13 16:52:45,486 base Running job "cancel_pending_transactions (trigger: interval[0:01:00], next run at: 2025-04-13 16:52:45 UTC)" (scheduled at 2025-04-13 16:52:45.479514+00:00)
+INFO 2025-04-13 16:52:45,490 base Running job "cancel_pending_transactions_by_updated_at (trigger: interval[0:01:00], next run at: 2025-04-13 16:53:45 UTC)" (scheduled at 2025-04-13 16:52:45.479592+00:00)
+INFO 2025-04-13 16:52:45,495 scheduler Updated 0 transactions to Completed.
+INFO 2025-04-13 16:52:45,496 scheduler Canceled and deleted 0 transactions due to payment timeout (based on created_at).
+INFO 2025-04-13 16:52:45,496 base Job "update_transaction_status (trigger: interval[0:01:00], next run at: 2025-04-13 16:53:45 UTC)" executed successfully
+INFO 2025-04-13 16:52:45,496 base Job "cancel_pending_transactions (trigger: interval[0:01:00], next run at: 2025-04-13 16:53:45 UTC)" executed successfully
+INFO 2025-04-13 16:52:45,496 scheduler Canceled and deleted 0 transactions due to remaining in Pending status for too long (based on updated_at).
+INFO 2025-04-13 16:52:45,496 base Job "cancel_pending_transactions_by_updated_at (trigger: interval[0:01:00], next run at: 2025-04-13 16:53:45 UTC)" executed successfully
+INFO 2025-04-13 16:53:45,193 base Running job "update_transaction_status (trigger: interval[0:01:00], next run at: 2025-04-13 16:54:45 UTC)" (scheduled at 2025-04-13 16:53:45.187318+00:00)
+INFO 2025-04-13 16:53:45,194 base Running job "cancel_pending_transactions (trigger: interval[0:01:00], next run at: 2025-04-13 16:54:45 UTC)" (scheduled at 2025-04-13 16:53:45.187844+00:00)
+INFO 2025-04-13 16:53:45,194 base Running job "cancel_pending_transactions_by_updated_at (trigger: interval[0:01:00], next run at: 2025-04-13 16:54:45 UTC)" (scheduled at 2025-04-13 16:53:45.187937+00:00)
+INFO 2025-04-13 16:53:45,200 scheduler Updated 0 transactions to Completed.
+INFO 2025-04-13 16:53:45,201 scheduler Canceled and deleted 0 transactions due to payment timeout (based on created_at).
+INFO 2025-04-13 16:53:45,201 scheduler Canceled and deleted 0 transactions due to remaining in Pending status for too long (based on updated_at).
+INFO 2025-04-13 16:53:45,201 base Job "update_transaction_status (trigger: interval[0:01:00], next run at: 2025-04-13 16:54:45 UTC)" executed successfully
+INFO 2025-04-13 16:53:45,201 base Job "cancel_pending_transactions (trigger: interval[0:01:00], next run at: 2025-04-13 16:54:45 UTC)" executed successfully
+INFO 2025-04-13 16:53:45,201 base Job "cancel_pending_transactions_by_updated_at (trigger: interval[0:01:00], next run at: 2025-04-13 16:54:45 UTC)" executed successfully
+INFO 2025-04-13 16:53:45,485 base Running job "update_transaction_status (trigger: interval[0:01:00], next run at: 2025-04-13 16:54:45 UTC)" (scheduled at 2025-04-13 16:53:45.479247+00:00)
+INFO 2025-04-13 16:53:45,485 base Running job "cancel_pending_transactions (trigger: interval[0:01:00], next run at: 2025-04-13 16:54:45 UTC)" (scheduled at 2025-04-13 16:53:45.479514+00:00)
+INFO 2025-04-13 16:53:45,485 base Running job "cancel_pending_transactions_by_updated_at (trigger: interval[0:01:00], next run at: 2025-04-13 16:54:45 UTC)" (scheduled at 2025-04-13 16:53:45.479592+00:00)
+INFO 2025-04-13 16:53:45,489 scheduler Updated 0 transactions to Completed.
+INFO 2025-04-13 16:53:45,489 scheduler Canceled and deleted 0 transactions due to payment timeout (based on created_at).
+INFO 2025-04-13 16:53:45,491 scheduler Canceled and deleted 0 transactions due to remaining in Pending status for too long (based on updated_at).
+INFO 2025-04-13 16:53:45,491 base Job "update_transaction_status (trigger: interval[0:01:00], next run at: 2025-04-13 16:54:45 UTC)" executed successfully
+INFO 2025-04-13 16:53:45,491 base Job "cancel_pending_transactions (trigger: interval[0:01:00], next run at: 2025-04-13 16:54:45 UTC)" executed successfully
+INFO 2025-04-13 16:53:45,491 base Job "cancel_pending_transactions_by_updated_at (trigger: interval[0:01:00], next run at: 2025-04-13 16:54:45 UTC)" executed successfully

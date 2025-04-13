@@ -104,7 +104,7 @@ def start_scheduler():
     # Add the update_transaction_status job with an IntervalTrigger (every 1 minute for testing)
     scheduler.add_job(
         update_transaction_status,
-        trigger=IntervalTrigger(minutes=1),  # Run every 1 minute
+        trigger=IntervalTrigger(minutes=60),  # Run every 1 minute
         id="update_transaction_status",
         replace_existing=True,
     )
@@ -112,7 +112,7 @@ def start_scheduler():
     # Add the cancel_pending_transactions job with an IntervalTrigger (every 1 minute for testing)
     scheduler.add_job(
         cancel_pending_transactions,
-        trigger=IntervalTrigger(minutes=1),  # Run every 1 minute
+        trigger=IntervalTrigger(minutes=60),  # Run every 1 minute
         id="cancel_pending_transactions",
         replace_existing=True,
     )
@@ -120,7 +120,7 @@ def start_scheduler():
     # Add the cancel_pending_transactions_by_updated_at job with an IntervalTrigger (every 1 minute for testing)
     scheduler.add_job(
         cancel_pending_transactions_by_updated_at,
-        trigger=IntervalTrigger(minutes=1),  # Run every 1 minute
+        trigger=IntervalTrigger(minutes=60),  # Run every 1 minute
         id="cancel_pending_transactions_by_updated_at",
         replace_existing=True,
     )
