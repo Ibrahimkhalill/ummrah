@@ -10,8 +10,6 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 from pathlib import Path
 from datetime import timedelta
 import cloudinary
-import cloudinary.uploader
-import cloudinary.api
 from dotenv import load_dotenv
 import os
 # Load environment variables from .env file
@@ -23,9 +21,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-j8rksz-1ht65u&_875#710=^_*_oyf$#$h+_&w=$lh7y)6gd)t'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['45.55.134.2','nusukey.duckdns.org', 'admin.nusukey-omra.com']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 INSTALLED_APPS = [
@@ -48,7 +46,7 @@ INSTALLED_APPS = [
     'notifications',
     'pixel',
     'payment',
-   
+
 ]
 
 
@@ -66,15 +64,15 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 
 # CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:5173", 
+#     "http://localhost:5173",
 #     "https://preview--productpioneer-hub.lovable.app",
 #     "*"
-    
+
 #     # Add your frontend origin here
 # ]
 
 # CSRF_TRUSTED_ORIGINS = [
-#     'http://localhost:5173',  
+#     'http://localhost:5173',
 #     'https://preview--productpioneer-hub.lovable.app',
 #     '*'
 #     # Add your frontend URL here
@@ -83,7 +81,8 @@ CORS_ALLOW_ALL_ORIGINS = True
 # your_project/settings.py
 CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',  # Use in-memory instead of Redis
+        # Use in-memory instead of Redis
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
     },
 }
 
@@ -231,10 +230,14 @@ CKEDITOR_5_CONFIGS = {
         },
         'heading': {
             'options': [
-                {'model': 'paragraph', 'title': 'Paragraph', 'class': 'ck-heading_paragraph'},
-                {'model': 'heading1', 'view': 'h1', 'title': 'Heading 1', 'class': 'ck-heading_heading1'},
-                {'model': 'heading2', 'view': 'h2', 'title': 'Heading 2', 'class': 'ck-heading_heading2'},
-                {'model': 'heading3', 'view': 'h3', 'title': 'Heading 3', 'class': 'ck-heading_heading3'},
+                {'model': 'paragraph', 'title': 'Paragraph',
+                    'class': 'ck-heading_paragraph'},
+                {'model': 'heading1', 'view': 'h1', 'title': 'Heading 1',
+                    'class': 'ck-heading_heading1'},
+                {'model': 'heading2', 'view': 'h2', 'title': 'Heading 2',
+                    'class': 'ck-heading_heading2'},
+                {'model': 'heading3', 'view': 'h3', 'title': 'Heading 3',
+                    'class': 'ck-heading_heading3'},
             ],
         },
         'list': {
@@ -279,9 +282,8 @@ LOGGING = {
 }
 
 
-
-
-CKEDITOR_5_FILE_UPLOAD_PERMISSION = "staff"  # Options: "staff", "authenticated", "any"
+# Options: "staff", "authenticated", "any"
+CKEDITOR_5_FILE_UPLOAD_PERMISSION = "staff"
 
 # Optional: Uncomment and set if you have custom CSS or storage
 # CKEDITOR_5_CUSTOM_CSS = 'path_to.css'

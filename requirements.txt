@@ -1,6 +1,7 @@
 annotated-types==0.7.0
 APScheduler==3.11.0
 asgiref==3.8.1
+async-timeout==5.0.1
 attrs==25.1.0
 autobahn==24.4.2
 Automat==24.8.1
@@ -13,6 +14,7 @@ channels_redis==4.2.1
 charset-normalizer==3.4.1
 click==8.1.8
 cloudinary==1.42.2
+colorama==0.4.6
 constantly==23.10.4
 cryptography==44.0.2
 daphne==4.1.2
@@ -53,11 +55,11 @@ pydantic_core==2.27.2
 PyJWT==2.9.0
 pyOpenSSL==25.0.0
 pyparsing==3.2.1
+python-dotenv==1.1.1
 redis==5.2.1
 requests==2.32.3
 rsa==4.9
 service-identity==24.2.0
-setuptools==76.0.0
 six==1.17.0
 soupsieve==2.6
 sqlparse==0.5.3
@@ -66,6 +68,7 @@ tqdm==4.67.1
 Twisted==24.11.0
 txaio==23.1.1
 typing_extensions==4.12.2
+tzdata==2025.2
 tzlocal==5.3.1
 uritemplate==4.1.1
 urllib3==2.3.0

@@ -6,28 +6,30 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils import timezone
-from .models import CustomUser, UserProfile, GuideProfile, OTP , Language
+from .models import CustomUser, UserProfile, GuideProfile, OTP, Language
 from .serializers import (
     UserRegisterSerializer, GuideRegisterSerializer, LoginSerializer, UserSerializer,
     UserProfileSerializer, GuideProfileSerializer, OTPSerializer, UpdateProfileSerializer,
-    AllProfileSerializer 
+    AllProfileSerializer
 )
 from .otpGenarate import generate_otp  # Assuming this exists
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 from .serializers import LangaugeSerializer
 # Utility function for sending OTP
+
+
 def send_otp_email(email, otp):
-    html_content = render_to_string('otp_email_template.html', {'otp': otp, 'email': email})
+    html_content = render_to_string('otp_email_template.html', {
+                                    'otp': otp, 'email': email})
     msg = EmailMultiAlternatives(
         subject='Your OTP Code',
         body=f'Your OTP is {otp}',
-        from_email='hijabpoint374@gmail.com',
+        from_email='Moha <hijabpoint374@gmail.com>',
         to=[email]
     )
     msg.attach_alternative(html_content, "text/html")
     msg.send(fail_silently=False)
-
 
 
 @api_view(["POST"])
@@ -35,28 +37,30 @@ def register_user(request):
     # For tourists and admins
     email = request.data.get("email")
     print("email", email)
-    
+
     if CustomUser.objects.filter(email=email).exists():
         return Response({"error": "Email already exists"}, status=status.HTTP_400_BAD_REQUEST)
-    
+
     serializer = UserRegisterSerializer(data=request.data)
     if serializer.is_valid():
         user = serializer.save()
         refresh = RefreshToken.for_user(user)
-        
+
         if user.role in ['tourist', 'admin']:
             try:
                 profile = user.user_profile
             except UserProfile.DoesNotExist:
-                profile = UserProfile.objects.create(user=user, name=user.email.split('@')[0])
+                profile = UserProfile.objects.create(
+                    user=user, name=user.email.split('@')[0])
             profile_serializer = UserProfileSerializer(profile)
         elif user.role == 'guide':
             try:
                 profile = user.guide_profile
             except GuideProfile.DoesNotExist:
-                profile = GuideProfile.objects.create(user=user, name=user.email.split('@')[0])
+                profile = GuideProfile.objects.create(
+                    user=user, name=user.email.split('@')[0])
             profile_serializer = GuideProfileSerializer(profile)
-            
+
         return Response({
             "access_token": str(refresh.access_token),
             "refresh_token": str(refresh),
@@ -64,34 +68,37 @@ def register_user(request):
         }, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(["POST"])
 def register_guide(request):
     # For guides
     email = request.data.get("email")
     print("email", email)
-    
+
     if CustomUser.objects.filter(email=email).exists():
         return Response({"error": "Email already exists"}, status=status.HTTP_400_BAD_REQUEST)
-    
+
     serializer = GuideRegisterSerializer(data=request.data)
-    
+
     if serializer.is_valid():
         user = serializer.save()
         refresh = RefreshToken.for_user(user)
-        
+
         if user.role in ['tourist', 'admin']:
             try:
                 profile = user.user_profile
             except UserProfile.DoesNotExist:
-                profile = UserProfile.objects.create(user=user, name=user.email.split('@')[0])
+                profile = UserProfile.objects.create(
+                    user=user, name=user.email.split('@')[0])
             profile_serializer = UserProfileSerializer(profile)
         elif user.role == 'guide':
             try:
                 profile = user.guide_profile
             except GuideProfile.DoesNotExist:
-                profile = GuideProfile.objects.create(user=user, name=user.email.split('@')[0])
+                profile = GuideProfile.objects.create(
+                    user=user, name=user.email.split('@')[0])
             profile_serializer = GuideProfileSerializer(profile)
-            
+
         return Response({
             "access_token": str(refresh.access_token),
             "refresh_token": str(refresh),
@@ -99,6 +106,7 @@ def register_guide(request):
         }, status=status.HTTP_201_CREATED)
     print(serializer.errors)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(["POST"])
 def send_otp(request):
@@ -108,7 +116,7 @@ def send_otp(request):
 
     if CustomUser.objects.filter(email=email).exists():
         return Response({"error": "Email already exists"}, status=status.HTTP_400_BAD_REQUEST)
-    
+
     otp = generate_otp()
     OTP.objects.create(email=email, otp=otp)
     try:
@@ -117,14 +125,15 @@ def send_otp(request):
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
 @api_view(["POST"])
 def verify_otp(request):
     email = request.data.get('email')
     otp = request.data.get('otp')
-    
+
     if not all([email, otp]):
         return Response({'error': 'Email and OTP are required'}, status=status.HTTP_400_BAD_REQUEST)
-    
+
     try:
         otp_record = OTP.objects.get(email=email, otp=otp)
         if otp_record.is_expired():
@@ -135,34 +144,38 @@ def verify_otp(request):
     except OTP.DoesNotExist:
         return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(["POST"])
 def login(request):
     serializer = LoginSerializer(data=request.data)
     if serializer.is_valid():
         user = serializer.validated_data
         refresh = RefreshToken.for_user(user)
-        
+
         # Choose profile based on role
         if user.role in ['tourist', 'admin']:
             try:
                 profile = user.user_profile
             except UserProfile.DoesNotExist:
-                profile = UserProfile.objects.create(user=user, name=user.email.split('@')[0])
+                profile = UserProfile.objects.create(
+                    user=user, name=user.email.split('@')[0])
             profile_serializer = UserProfileSerializer(profile)
         elif user.role == 'guide':
             try:
                 profile = user.guide_profile
             except GuideProfile.DoesNotExist:
-                profile = GuideProfile.objects.create(user=user, name=user.email.split('@')[0])
+                profile = GuideProfile.objects.create(
+                    user=user, name=user.email.split('@')[0])
             profile_serializer = GuideProfileSerializer(profile)
-        
+
         return Response({
             "access_token": str(refresh.access_token),
             "refresh_token": str(refresh),
             "user": profile_serializer.data
         }, status=status.HTTP_200_OK)
-    print("serializer.errors",serializer.errors)
+    print("serializer.errors", serializer.errors)
     return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+
 
 @api_view(["POST"])
 def password_reset_send_otp(request):
@@ -181,12 +194,13 @@ def password_reset_send_otp(request):
         return Response({'error': 'Email not found'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 @api_view(['POST'])
 def reset_password(request):
     email = request.data.get('email')
     new_password = request.data.get('new_password')
 
-    
     if not all([email, new_password]):
         return Response({'error': 'Email, new password, and OTP are required'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -199,6 +213,7 @@ def reset_password(request):
         return Response({'error': 'Invalid OTP'}, status=status.HTTP_400_BAD_REQUEST)
     except CustomUser.DoesNotExist:
         return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
 
 @api_view(['GET', 'PUT'])
 @authentication_classes([JWTAuthentication])
@@ -223,16 +238,18 @@ def profile(request):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except profile_model.DoesNotExist:
             return Response({"error": "Profile not found"}, status=status.HTTP_404_NOT_FOUND)
-    
+
     elif request.method == 'PUT':
         try:
             profile = getattr(user, related_name)
             # Now handle file upload correctly
-            image = request.FILES.get('image')  # Access the file via request.FILES
+            # Access the file via request.FILES
+            image = request.FILES.get('image')
 
             # Update the profile using the data from request.data and request.FILES
-            serializer = serializer_class(profile, data=request.data, partial=True)
-            
+            serializer = serializer_class(
+                profile, data=request.data, partial=True)
+
             if serializer.is_valid():  # Ensure the serializer is valid before accessing validated_data
                 # If image is present, add it to the validated data
                 if image:
@@ -242,11 +259,11 @@ def profile(request):
                 serializer.save()  # Save the profile with updated data
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
-                print("Serializer errors:", serializer.errors)  # Log errors to console
+                # Log errors to console
+                print("Serializer errors:", serializer.errors)
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except profile_model.DoesNotExist:
             return Response({"error": "Profile not found"}, status=status.HTTP_404_NOT_FOUND)
-
 
 
 @api_view(['POST', 'GET'])  # Allow both POST and GET (though GET is not ideal)
@@ -271,7 +288,6 @@ def refresh_access_token(request):
         return Response({"error": "Invalid refresh token"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 @api_view(['GET'])
 def all_users(request):
     if request.method == 'GET':
@@ -294,34 +310,33 @@ def all_users(request):
         # Return response with the combined data
         return Response(combined_data, status=status.HTTP_200_OK)
 
-@api_view(['GET'])       
+
+@api_view(['GET'])
 def get_language(request):
     languages = Language.objects.all()
     data = {lang.name: lang.id for lang in languages}
     return Response(data, status=status.HTTP_200_OK)
 
 
-
-
 @api_view(["PUT"])
 def approved_user(request, id):
-    
+
     try:
         user = GuideProfile.objects.get(id=id)
-        
+
         user.is_verified = True
         user.save()
-        
-        return Response({"messages":"User Approved"}, status=200)
-    
+
+        return Response({"messages": "User Approved"}, status=200)
+
     except Exception:
         return Response({"error": "Invalid refresh token"}, status=status.HTTP_400_BAD_REQUEST)
-    
-    
+
+
 @api_view(['DELETE'])
 def delete_user(request, id):
     if request.method == 'DELETE':
         user = CustomUser.objects.get(pk=id)  # Newest first
         user.delete()
-        return Response({"messages":"User delete Sucessfully"}, status=status.HTTP_204_NO_CONTENT)
-    return  Response({"messages":"method not allowed"}, status=status.HTTP_204_NO_CONTENT)
+        return Response({"messages": "User delete Sucessfully"}, status=status.HTTP_204_NO_CONTENT)
+    return Response({"messages": "method not allowed"}, status=status.HTTP_204_NO_CONTENT)
