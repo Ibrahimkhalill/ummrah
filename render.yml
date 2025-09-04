@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: moha
+    env: python
+    plan: free
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: gunicorn moha.wsgi --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: moha.settings
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
