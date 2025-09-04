@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'channels',
     'corsheaders',
     'notifications',
-    'pixel',
     'payment',
 
 ]
